@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TCSA Studio</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="wash"></div>
+  <div class="grain"></div>
+
+  <header class="top">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 42 42" width="42" height="42">
+          <rect x="1.5" y="1.5" width="39" height="39" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M10 28 L18 12 L24 22 L32 10" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="18" cy="12" r="1.6" fill="currentColor"/>
+        </svg>
+      </div>
+      <div>
+        <h1>TCSA Studio</h1>
+        <p>Text-Conditioning Style Absorption · 把已有風格編成 Krea 2 文本側 LoRA</p>
+      </div>
+    </div>
+    <div class="top-meta">
+      <span class="pill" id="healthPill">連線中</span>
+      <span class="pill dim">不載入 12B DiT</span>
+      <span class="pill dim" id="modePill">Demo</span>
+    </div>
+  </header>
+
+  <nav class="steps" id="steps">
+    <button data-step="0" class="on"><i>01</i><b>設定風格</b><span>配對 P<sub>c</sub> / P<sub>c+s</sub></span></button>
+    <button data-step="1"><i>02</i><b>方向與對照</b><span>cosine · PCA · null · soft-prompt</span></button>
+    <button data-step="2"><i>03</i><b>吸收 LoRA</b><span>rank-1 初始化 + SVD/LS</span></button>
+    <button data-step="3"><i>04</i><b>匯出驗證</b><span>A → C 決勝負</span></button>
+  </nav>
+
+  <div class="shell">
+    <main>
+      <section class="panel" data-panel="0">
+        <div class="grid-2">
+          <div>
+            <h2>目標風格</h2>
+            <p class="hint">只抽取模型已經會回應的風格詞。私有畫室風格若寫進 prompt 都出不來，這裡也抽不到。</p>
+            <div class="presets" id="presets"></div>
+            <label>風格名稱
+              <input id="styleName" value="watercolor" autocomplete="off" />
+            </label>
+            <label>風格寫法（一行一個，避免抽到單一 token）
+              <textarea id="phrases" rows="5"></textarea>
+            </label>
+            <div class="row">
+              <label class="grow">配對方式
+                <select id="pairing">
+                  <option value="round_robin">輪流：每個內容配一種寫法</option>
+                  <option value="cartesian">笛卡兒：每個內容 × 每種寫法</option>
+                </select>
+              </label>
+              <label>編碼器
+                <select id="mode">
+                  <option value="demo">Demo（無權重，可直接跑）</option>
+                  <option value="real">Real（Qwen3-VL + RAW）</option>
+                </select>
+              </label>
+            </div>
+            <div id="realPaths" class="real-paths hidden">
+              <label>Qwen3-VL-4B 路徑
+                <input id="tePath" placeholder="/models/Qwen3-VL-4B-Instruct" />
+              </label>
+              <label>Krea 2 RAW safetensors
+                <input id="rawPath" placeholder="/models/krea2_raw.safetensors" />
+              </label>
+              <p class="hint">真實模式仍不開 GPU：Qwen3-VL 走官方 12 層 tap（2,5,…,35），RAW 只懶加載 txtmlp / txtfusion。鍵名必須對盤驗證。</p>
+              <label>Instruction template（空白則用 tokenizer chat template）
+                <input id="teTemplate" placeholder="{prompt}" />
+              </label>
+            </div>
+          </div>
+          <div>
+            <h2>內容 prompt</h2>
+            <p class="hint">抽取集與測試集必須切開。風格詞不要寫進內容裡。</p>
+            <label>抽取集
+              <textarea id="extract" rows="9"></textarea>
+            </label>
+            <label>測試集（驗證卡片用，不可出現在抽取集）
+              <textarea id="evalset" rows="6"></textarea>
+            </label>
+            <div class="pair-preview">
+              <h3>配對預覽 <small id="pairCount"></small></h3>
+              <div class="table compact" id="pairPreview"></div>
+            </div>
+          </div>
+        </div>
+        <footer class="panel-foot">
+          <button class="ghost" id="resetBtn">恢復論文預設</button>
+          <button class="primary" id="toAnalyze">下一步：方向與對照</button>
+        </footer>
+      </section>
+
+      <section class="panel hidden" data-panel="1">
+        <div class="row between wrap">
+          <div>
+            <h2>風格方向檢驗</h2>
+            <p class="hint">Δ 必須跨內容穩定、比 null 更專一，且 h+αμ 在測試集上要靠近 E(P<sub>c+s</sub>)，才准寫 LoRA。</p>
+          </div>
+          <div class="row tight">
+            <label class="tiny">cosine 門檻
+              <input id="cosGate" type="number" min="0" max="1" step="0.05" value="0.40" />
+            </label>
+            <label class="tiny">λ₁ 門檻
+              <input id="pcaGate" type="number" min="0" max="1" step="0.05" value="0.35" />
+            </label>
+            <button class="primary" id="runAnalyze">執行編碼 + 門檻</button>
+          </div>
+        </div>
+        <div class="gates" id="gates">
+          <div class="gate" id="gateCos"><b>Cosine 一致性</b><span>—</span><small>門檻 0.40</small></div>
+          <div class="gate" id="gatePca"><b>PCA λ₁ 集中度</b><span>—</span><small>門檻 0.35</small></div>
+          <div class="gate" id="gateSpec"><b>風格專一性</b><span>—</span><small> paraphrases ≫ nulls</small></div>
+          <div class="gate" id="gateSoft"><b>Soft-prompt</b><span>—</span><small>h+αμ → E(P<sub>c+s</sub>)</small></div>
+          <div class="gate" id="gateGo"><b>是否寫 LoRA</b><span>—</span><small>四關都過才建議吸收</small></div>
+        </div>
+        <div class="nulls" id="nulls"></div>
+        <div class="control-card" id="softCard">
+          <b>Soft-prompt 基線（Phase 1b）</b>
+          <span id="softText">尚未跑。在測試集上，h + αμ 應比裸 h 更接近帶風格詞的編碼，否則吸收救不了這個方向。</span>
+        </div>
+        <div class="grid-3">
+          <div class="chart-card">
+            <h3>成對 cosine 熱圖</h3>
+            <canvas id="heat" width="560" height="560"></canvas>
+            <div class="legend"><span>−1</span><i></i><span>+1</span></div>
+          </div>
+          <div class="chart-card">
+            <h3>PCA 解釋變異</h3>
+            <div id="pcaBars" class="bars"></div>
+            <canvas id="scatter" width="560" height="280"></canvas>
+            <p class="hint" id="analyzeNote"></p>
+          </div>
+          <div class="chart-card">
+            <h3>配對與 ‖Δ‖</h3>
+            <div class="table scroll" id="pairTable"></div>
+          </div>
+        </div>
+        <footer class="panel-foot">
+          <button class="ghost" data-back="0">上一步</button>
+          <button class="primary" id="toDistill" disabled>下一步：吸收</button>
+        </footer>
+      </section>
+
+      <section class="panel hidden" data-panel="2">
+        <div class="grid-2">
+          <div>
+            <h2>兩階段吸收</h2>
+            <p class="hint">Rank-1 是正確的解析初始化。主方法是殘差薄 SVD / 最小二乘，再做幾步 ALS。不反傳 DiT。</p>
+            <div class="formula" id="formula">
+              <div class="eq">目標　Proj<sub>W+BA</sub>(E(P<sub>c</sub>)) ≈ Proj<sub>W</sub>(E(P<sub>c+s</sub>))</div>
+              <div class="eq dim" id="eqRank1">初始化　ΔW = α (Wμ) vᵀ　·　v = h̄ / ‖h̄‖²　（勿改成 ‖h̄‖）</div>
+              <div class="eq dim on" id="eqLstsq">主方法　R = W(H<sub>s</sub>−H<sub>c</sub>)ᵀ　·　BA ≈ SVD<sub>r</sub>(R (H<sub>c</sub>ᵀ)⁺) + ALS　·　lora_α = rank</div>
+            </div>
+            <label>方法
+              <select id="method">
+                <option value="svdl" selected>SVD / LS（論文主方法，預設 rank 4）</option>
+                <option value="rank1">Rank-1 初始化（透明、容量最小）</option>
+                <option value="two_stage">兩階段：寫 Rank-1 初值 + SVD/LS 主檔</option>
+              </select>
+            </label>
+            <div class="row">
+              <label>Rank
+                <select id="rank">
+                  <option>1</option><option>2</option><option selected>4</option><option>8</option>
+                </select>
+              </label>
+              <label>α 強度
+                <input id="alpha" type="number" min="0.1" max="3" step="0.1" value="1.0" />
+              </label>
+              <label>主檔格式
+                <select id="fmt">
+                  <option value="diffusers">Diffusers / PEFT</option>
+                  <option value="kohya">Kohya / Musubi</option>
+                </select>
+              </label>
+            </div>
+            <fieldset>
+              <legend>目標層（論文順序：projector → txt_in）</legend>
+              <label class="check"><input class="layer" type="checkbox" value="text_fusion.projector" checked /> text_fusion.projector <em>txtfusion.projector</em></label>
+              <label class="check"><input class="layer" type="checkbox" value="txt_in.linear_1" checked /> txt_in.linear_1 <em>txtmlp.1</em></label>
+              <label class="check"><input class="layer" type="checkbox" value="txt_in.linear_2" checked /> txt_in.linear_2 <em>txtmlp.3</em></label>
+            </fieldset>
+            <fieldset>
+              <legend>額外檔</legend>
+              <label class="check"><input type="checkbox" id="exportKohya" checked /> 同時寫 Kohya 鍵名</label>
+              <label class="check"><input type="checkbox" id="includeRank1" checked /> 另存 Rank-1 初始化檔</label>
+              <label class="check"><input type="checkbox" id="includeNeg" /> 負向 LoRA（翻轉 μ）</label>
+              <label class="check"><input type="checkbox" id="includeRnd" /> 隨機對照 LoRA（同 rank、同 ‖BA‖）</label>
+            </fieldset>
+            <button class="primary" id="runDistill">寫入 LoRA</button>
+          </div>
+          <div>
+            <h2>層重建誤差</h2>
+            <p class="hint">‖(W+BA) H<sub>c</sub> − W H<sub>s</sub>‖ / ‖W H<sub>s</sub>‖。旁邊一欄是 Rank-1 初值誤差，方便對照吸收有沒有幫上忙。</p>
+            <div id="layerTable" class="table"></div>
+            <div id="fileList" class="file-list"></div>
+          </div>
+        </div>
+        <footer class="panel-foot">
+          <button class="ghost" data-back="1">上一步</button>
+          <button class="primary" id="toExport" disabled>下一步：匯出驗證</button>
+        </footer>
+      </section>
+
+      <section class="panel hidden" data-panel="3">
+        <h2>匯出與四條件驗證</h2>
+        <div class="export-bar" id="exportBar">尚未蒸餾</div>
+        <div class="howto compact-howto">
+          <p>成敗看 <b>A → C</b>：不寫風格詞、只掛 LoRA，圖是否往 B 的色調 / 紙感靠。同一 seed、同一 sampler。</p>
+        </div>
+        <div class="eval-nav" id="evalNav"></div>
+        <div class="cards" id="valCards"></div>
+        <div class="sweep">
+          <h3>強度掃描（hosted Turbo 上填）</h3>
+          <p class="hint">0.25 / 0.5 / 0.75 / 1.0 / 1.25 應大致單調。把生成圖拖到旁邊對就好，本機不跑 DiT。</p>
+          <div class="sweep-row">
+            <span>0.25</span><span>0.50</span><span>0.75</span><span>1.00</span><span>1.25</span>
+          </div>
+        </div>
+        <div class="howto">
+          <h3>在 Tensor.Art / ComfyUI / Krea Turbo 上測</h3>
+          <ol>
+            <li>下載 .safetensors，掛到 <b>Krea 2 Turbo</b>（官方建議 RAW 抽、Turbo 推）。</li>
+            <li>同一 seed、同一 sampler，跑 A → B → C → D。</li>
+            <li>C 接近 B：風格被編成先驗。C 只偏色：提高 rank 到 4 或 8 再蒸一次。</li>
+            <li>D 崩壞代表疊加干擾，把強度降到 0.5 試試。</li>
+          </ol>
+          <pre class="snippet" id="snippet">等待蒸餾後產生掛載摘要</pre>
+          <p class="warn">Demo 模式產出的 LoRA 形狀正確、公式正確，但 W 不是 Krea 權重，不能當成品用。接上真實 Qwen3-VL 與 RAW 後重跑才是可上平台的檔。</p>
+        </div>
+        <footer class="panel-foot">
+          <button class="ghost" data-back="2">上一步</button>
+          <button class="ghost" id="copyAll">複製當前 A–D prompts</button>
+        </footer>
+      </section>
+    </main>
+
+    <aside class="rail">
+      <section>
+        <h3>任務</h3>
+        <div id="jobs" class="jobs">尚無任務</div>
+      </section>
+      <section>
+        <h3>執行紀錄</h3>
+        <pre id="log">TCSA Studio 0.3 · rank-1 init + SVD/LS absorption · no 12B DiT.</pre>
+      </section>
+    </aside>
+  </div>
+
+  <div id="busy" class="busy hidden" aria-live="polite">
+    <div class="busy-card">
+      <div class="spin"></div>
+      <p id="busyMsg">處理中</p>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

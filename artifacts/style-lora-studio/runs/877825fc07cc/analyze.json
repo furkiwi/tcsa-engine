@@ -1,0 +1,444 @@
+{
+  "job_id": "877825fc07cc",
+  "spec": {
+    "style_name": "watercolor",
+    "style_phrases": [
+      "watercolor",
+      "watercolor painting",
+      "traditional watercolor illustration",
+      "hand-painted watercolor"
+    ],
+    "extraction_contents": [
+      "a tiger walking through a jungle",
+      "a woman standing in a city",
+      "a spaceship above a planet",
+      "a medieval castle on a mountain",
+      "a bowl of fruit on a wooden table",
+      "a futuristic motorcycle in a desert"
+    ],
+    "evaluation_contents": [
+      "a girl walking through a forest",
+      "a dog sitting on a porch",
+      "a portrait of an old man",
+      "a robot in a workshop",
+      "a night market with paper lanterns",
+      "a bowl of noodles on a table",
+      "a mountain landscape with a lake",
+      "a steam locomotive in the rain"
+    ],
+    "pairing": "round_robin",
+    "mode": "demo",
+    "te_path": "",
+    "raw_path": "",
+    "layers": [
+      "txt_in.linear_1",
+      "txt_in.linear_2",
+      "text_fusion.projector"
+    ],
+    "rank": 1,
+    "alpha": 1.0,
+    "method": "rank1",
+    "export_format": "diffusers",
+    "cosine_gate": 0.4,
+    "pca_gate": 0.35,
+    "include_control": true,
+    "export_kohya": true,
+    "include_negative": true,
+    "include_random": true
+  },
+  "stats": {
+    "n_pairs": 6,
+    "dim": 384,
+    "backend": "demo",
+    "notes": [
+      "demo encoder: hash embeddings, not Qwen3-VL",
+      "known style phrases get a shared offset; unknown phrases stay weak and content-tied"
+    ],
+    "mean_cosine": 0.9970364928629414,
+    "cosine_matrix": [
+      [
+        0.9999999577531715,
+        0.9969827278870504,
+        0.9958856978191024,
+        0.996500182030795,
+        0.9999999577531681,
+        0.9969827277624327
+      ],
+      [
+        0.9969827278870504,
+        0.9999999574332173,
+        0.9963528669841827,
+        0.9967109489105233,
+        0.9969827277898635,
+        0.999999957433213
+      ],
+      [
+        0.9958856978191024,
+        0.9963528669841827,
+        0.9999999573930441,
+        0.9967171784318799,
+        0.995885696737956,
+        0.9963528663508554
+      ],
+      [
+        0.996500182030795,
+        0.9967109489105233,
+        0.9967171784318799,
+        0.9999999573600263,
+        0.9965001809803147,
+        0.9967109484075354
+      ],
+      [
+        0.9999999577531681,
+        0.9969827277898635,
+        0.995885696737956,
+        0.9965001809803147,
+        0.9999999577531707,
+        0.9969827276652471
+      ],
+      [
+        0.9969827277624327,
+        0.999999957433213,
+        0.9963528663508554,
+        0.9967109484075354,
+        0.9969827276652471,
+        0.999999957433216
+      ]
+    ],
+    "cosine_gate": 0.4,
+    "cosine_pass": true,
+    "pca_ratios": [
+      0.9975334191634844,
+      0.0010525758939458083,
+      0.0008827892449839777,
+      0.0005312156968326198,
+      6.78038337868182e-16,
+      5.567483183879823e-16
+    ],
+    "pca_cumulative": [
+      0.9975334191634844,
+      0.9985859950574302,
+      0.9994687843024141,
+      0.9999999999992467,
+      0.9999999999992474,
+      0.9999999999992479
+    ],
+    "pca_gate": 0.35,
+    "lambda1": 0.9975334191634844,
+    "pca_pass": true,
+    "proceed": true,
+    "delta_norm_mean": 0.47082778811454773,
+    "delta_norms": [
+      0.4734083116054535,
+      0.46984991431236267,
+      0.4694069027900696,
+      0.46904340386390686,
+      0.4734082818031311,
+      0.46984991431236267
+    ],
+    "mu_norm": 0.47024640440940857,
+    "scatter": [
+      [
+        -0.4729211997078141,
+        0.021397094508458954
+      ],
+      [
+        -0.4694121295887655,
+        -0.010982476522646148
+      ],
+      [
+        -0.4685108402989707,
+        -0.01364184125527253
+      ],
+      [
+        -0.46830084474215594,
+        -0.007551375446932353
+      ],
+      [
+        -0.4729211941346789,
+        0.021397098202881194
+      ],
+      [
+        -0.4694121279120685,
+        -0.010982475374282956
+      ]
+    ],
+    "pair_rows": [
+      {
+        "id": 0,
+        "content": "a tiger walking through a jungle",
+        "styled": "a watercolor tiger walking through a jungle",
+        "phrase": "watercolor",
+        "label": "a tiger walking through a j…",
+        "delta_norm": 0.4734083116054535,
+        "style_tokens": [
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "tiger",
+          "walking",
+          "through",
+          "a",
+          "jungle"
+        ]
+      },
+      {
+        "id": 1,
+        "content": "a woman standing in a city",
+        "styled": "a watercolor painting woman standing in a city",
+        "phrase": "watercolor painting",
+        "label": "a woman standing in a city",
+        "delta_norm": 0.46984991431236267,
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ],
+        "shared_tokens": [
+          "a",
+          "woman",
+          "standing",
+          "in",
+          "a",
+          "city"
+        ]
+      },
+      {
+        "id": 2,
+        "content": "a spaceship above a planet",
+        "styled": "a traditional watercolor illustration spaceship above a planet",
+        "phrase": "traditional watercolor illustration",
+        "label": "a spaceship above a planet",
+        "delta_norm": 0.4694069027900696,
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ],
+        "shared_tokens": [
+          "a",
+          "spaceship",
+          "above",
+          "a",
+          "planet"
+        ]
+      },
+      {
+        "id": 3,
+        "content": "a medieval castle on a mountain",
+        "styled": "a hand-painted watercolor medieval castle on a mountain",
+        "phrase": "hand-painted watercolor",
+        "label": "a medieval castle on a moun…",
+        "delta_norm": 0.46904340386390686,
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "medieval",
+          "castle",
+          "on",
+          "a",
+          "mountain"
+        ]
+      },
+      {
+        "id": 4,
+        "content": "a bowl of fruit on a wooden table",
+        "styled": "a watercolor bowl of fruit on a wooden table",
+        "phrase": "watercolor",
+        "label": "a bowl of fruit on a wooden…",
+        "delta_norm": 0.4734082818031311,
+        "style_tokens": [
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "bowl",
+          "of",
+          "fruit",
+          "on",
+          "a",
+          "wooden",
+          "table"
+        ]
+      },
+      {
+        "id": 5,
+        "content": "a futuristic motorcycle in a desert",
+        "styled": "a watercolor painting futuristic motorcycle in a desert",
+        "phrase": "watercolor painting",
+        "label": "a futuristic motorcycle in …",
+        "delta_norm": 0.46984991431236267,
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ],
+        "shared_tokens": [
+          "a",
+          "futuristic",
+          "motorcycle",
+          "in",
+          "a",
+          "desert"
+        ]
+      }
+    ],
+    "pairs": [
+      {
+        "id": 0,
+        "content": "a tiger walking through a jungle",
+        "phrase": "watercolor",
+        "styled": "a watercolor tiger walking through a jungle",
+        "shared_tokens": [
+          "a",
+          "tiger",
+          "walking",
+          "through",
+          "a",
+          "jungle"
+        ],
+        "style_tokens": [
+          "watercolor"
+        ]
+      },
+      {
+        "id": 1,
+        "content": "a woman standing in a city",
+        "phrase": "watercolor painting",
+        "styled": "a watercolor painting woman standing in a city",
+        "shared_tokens": [
+          "a",
+          "woman",
+          "standing",
+          "in",
+          "a",
+          "city"
+        ],
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ]
+      },
+      {
+        "id": 2,
+        "content": "a spaceship above a planet",
+        "phrase": "traditional watercolor illustration",
+        "styled": "a traditional watercolor illustration spaceship above a planet",
+        "shared_tokens": [
+          "a",
+          "spaceship",
+          "above",
+          "a",
+          "planet"
+        ],
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ]
+      },
+      {
+        "id": 3,
+        "content": "a medieval castle on a mountain",
+        "phrase": "hand-painted watercolor",
+        "styled": "a hand-painted watercolor medieval castle on a mountain",
+        "shared_tokens": [
+          "a",
+          "medieval",
+          "castle",
+          "on",
+          "a",
+          "mountain"
+        ],
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ]
+      },
+      {
+        "id": 4,
+        "content": "a bowl of fruit on a wooden table",
+        "phrase": "watercolor",
+        "styled": "a watercolor bowl of fruit on a wooden table",
+        "shared_tokens": [
+          "a",
+          "bowl",
+          "of",
+          "fruit",
+          "on",
+          "a",
+          "wooden",
+          "table"
+        ],
+        "style_tokens": [
+          "watercolor"
+        ]
+      },
+      {
+        "id": 5,
+        "content": "a futuristic motorcycle in a desert",
+        "phrase": "watercolor painting",
+        "styled": "a watercolor painting futuristic motorcycle in a desert",
+        "shared_tokens": [
+          "a",
+          "futuristic",
+          "motorcycle",
+          "in",
+          "a",
+          "desert"
+        ],
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ]
+      }
+    ],
+    "control": {
+      "phrase": "xyzzorp glorblesh",
+      "mean_cosine": 0.006774331221502166,
+      "lambda1": 0.1914366879647712,
+      "proceed": false,
+      "cosine_pass": false,
+      "pca_pass": false,
+      "delta_norm_mean": 0.30304577946662903
+    }
+  },
+  "backend": "demo",
+  "dim": 384,
+  "created": 1788778033.0053449,
+  "n_pairs": 6,
+  "preview_pairs": [
+    {
+      "content": "a tiger walking through a jungle",
+      "styled": "a watercolor tiger walking through a jungle",
+      "phrase": "watercolor"
+    },
+    {
+      "content": "a woman standing in a city",
+      "styled": "a watercolor painting woman standing in a city",
+      "phrase": "watercolor painting"
+    },
+    {
+      "content": "a spaceship above a planet",
+      "styled": "a traditional watercolor illustration spaceship above a planet",
+      "phrase": "traditional watercolor illustration"
+    },
+    {
+      "content": "a medieval castle on a mountain",
+      "styled": "a hand-painted watercolor medieval castle on a mountain",
+      "phrase": "hand-painted watercolor"
+    },
+    {
+      "content": "a bowl of fruit on a wooden table",
+      "styled": "a watercolor bowl of fruit on a wooden table",
+      "phrase": "watercolor"
+    },
+    {
+      "content": "a futuristic motorcycle in a desert",
+      "styled": "a watercolor painting futuristic motorcycle in a desert",
+      "phrase": "watercolor painting"
+    }
+  ]
+}

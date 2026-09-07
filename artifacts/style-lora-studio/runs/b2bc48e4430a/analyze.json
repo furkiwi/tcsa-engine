@@ -1,0 +1,1482 @@
+{
+  "job_id": "b2bc48e4430a",
+  "spec": {
+    "style_name": "watercolor",
+    "style_phrases": [
+      "watercolor",
+      "watercolor painting",
+      "traditional watercolor illustration",
+      "hand-painted watercolor"
+    ],
+    "extraction_contents": [
+      "a tiger walking through a jungle",
+      "a woman standing in a city",
+      "a spaceship above a planet",
+      "a medieval castle on a mountain",
+      "a bowl of fruit on a wooden table",
+      "a futuristic motorcycle in a desert",
+      "a harbor at dusk with fishing boats",
+      "a jungle path with hanging vines",
+      "an old library with tall shelves",
+      "a red train crossing a steel bridge",
+      "a ceramic teapot on a linen cloth",
+      "a fox sitting in snow",
+      "a greenhouse filled with ferns",
+      "a stone bridge over a quiet canal",
+      "a violin on an empty chair",
+      "a lantern hanging from a cedar tree",
+      "a fisherman on a misty lake",
+      "a bicycle leaning against a bakery",
+      "a cathedral interior with stained glass",
+      "a windmill on a grassy hill"
+    ],
+    "evaluation_contents": [
+      "a girl walking through a forest",
+      "a dog sitting on a porch",
+      "a portrait of an old man",
+      "a robot in a workshop",
+      "a night market with paper lanterns",
+      "a bowl of noodles on a table",
+      "a mountain landscape with a lake",
+      "a steam locomotive in the rain"
+    ],
+    "pairing": "round_robin",
+    "mode": "demo",
+    "te_path": "",
+    "raw_path": "",
+    "layers": [
+      "txt_in.linear_1",
+      "txt_in.linear_2",
+      "text_fusion.projector"
+    ],
+    "rank": 1,
+    "alpha": 1.0,
+    "method": "rank1",
+    "export_format": "diffusers",
+    "cosine_gate": 0.4,
+    "pca_gate": 0.35,
+    "include_control": true,
+    "export_kohya": true,
+    "include_negative": false,
+    "include_random": false
+  },
+  "stats": {
+    "n_pairs": 20,
+    "dim": 384,
+    "backend": "demo",
+    "notes": [
+      "demo encoder: hash embeddings, not Qwen3-VL",
+      "known style phrases get a shared offset; unknown phrases stay weak and content-tied"
+    ],
+    "mean_cosine": 0.9972565172994635,
+    "cosine_matrix": [
+      [
+        0.9999999577531715,
+        0.9969827278870504,
+        0.9958856978191024,
+        0.996500182030795,
+        0.9999999577531681,
+        0.9969827277624327,
+        0.9958856976035607,
+        0.9965001817866259,
+        0.9999999577531677,
+        0.9969827277479026,
+        0.9958856976481272,
+        0.9965001820880623,
+        0.999999957753167,
+        0.9969827275837706,
+        0.9958856977899443,
+        0.9965001815263618,
+        0.9999999577531666,
+        0.9969827276318617,
+        0.9958856976006882,
+        0.9965001819290694
+      ],
+      [
+        0.9969827278870504,
+        0.9999999574332173,
+        0.9963528669841827,
+        0.9967109489105233,
+        0.9969827277898635,
+        0.999999957433213,
+        0.9963528670216768,
+        0.9967109485547326,
+        0.9969827282067419,
+        0.9999999574332127,
+        0.996352867205499,
+        0.9967109487565377,
+        0.9969827280219894,
+        0.9999999574332126,
+        0.9963528670140039,
+        0.9967109485287546,
+        0.9969827282550707,
+        0.9999999574332135,
+        0.9963528670966693,
+        0.9967109486920562
+      ],
+      [
+        0.9958856978191024,
+        0.9963528669841827,
+        0.9999999573930441,
+        0.9967171784318799,
+        0.995885696737956,
+        0.9963528663508554,
+        0.9999999573930394,
+        0.9967171777011384,
+        0.9958856975993737,
+        0.9963528667784458,
+        0.9999999573930408,
+        0.9967171780849629,
+        0.9958856972851513,
+        0.9963528667279078,
+        0.9999999573930408,
+        0.99671717829695,
+        0.9958856974594892,
+        0.9963528667672181,
+        0.99999995739304,
+        0.9967171777626634
+      ],
+      [
+        0.996500182030795,
+        0.9967109489105233,
+        0.9967171784318799,
+        0.9999999573600263,
+        0.9965001809803147,
+        0.9967109484075354,
+        0.9967171777150009,
+        0.999999957360022,
+        0.9965001817291417,
+        0.9967109486171641,
+        0.9967171780378836,
+        0.9999999573600227,
+        0.9965001816384351,
+        0.9967109484567627,
+        0.9967171783572446,
+        0.9999999573600218,
+        0.9965001812430108,
+        0.9967109488027146,
+        0.9967171783120083,
+        0.9999999573600212
+      ],
+      [
+        0.9999999577531681,
+        0.9969827277898635,
+        0.995885696737956,
+        0.9965001809803147,
+        0.9999999577531707,
+        0.9969827276652471,
+        0.9958856965224137,
+        0.9965001807361454,
+        0.9999999577531676,
+        0.9969827276507166,
+        0.9958856965669807,
+        0.9965001810375811,
+        0.9999999577531674,
+        0.9969827274865836,
+        0.9958856967087971,
+        0.9965001804758803,
+        0.9999999577531677,
+        0.9969827275346747,
+        0.9958856965195414,
+        0.9965001808785897
+      ],
+      [
+        0.9969827277624327,
+        0.999999957433213,
+        0.9963528663508554,
+        0.9967109484075354,
+        0.9969827276652471,
+        0.999999957433216,
+        0.9963528663883486,
+        0.9967109480517453,
+        0.9969827280821246,
+        0.9999999574332125,
+        0.9963528665721715,
+        0.9967109482535492,
+        0.9969827278973729,
+        0.9999999574332143,
+        0.9963528663806764,
+        0.9967109480257669,
+        0.9969827281304549,
+        0.9999999574332126,
+        0.9963528664633419,
+        0.9967109481890679
+      ],
+      [
+        0.9958856976035607,
+        0.9963528670216768,
+        0.9999999573930394,
+        0.9967171777150009,
+        0.9958856965224137,
+        0.9963528663883486,
+        0.9999999573930446,
+        0.9967171769842604,
+        0.9958856973838334,
+        0.9963528668159393,
+        0.99999995739304,
+        0.9967171773680847,
+        0.995885697069609,
+        0.996352866765401,
+        0.9999999573930403,
+        0.9967171775800721,
+        0.9958856972439476,
+        0.9963528668047117,
+        0.9999999573930405,
+        0.996717177045786
+      ],
+      [
+        0.9965001817866259,
+        0.9967109485547326,
+        0.9967171777011384,
+        0.999999957360022,
+        0.9965001807361454,
+        0.9967109480517453,
+        0.9967171769842604,
+        0.999999957360026,
+        0.9965001814849722,
+        0.9967109482613731,
+        0.9967171773071426,
+        0.9999999573600229,
+        0.996500181394266,
+        0.996710948100971,
+        0.9967171776265035,
+        0.9999999573600227,
+        0.9965001809988405,
+        0.9967109484469243,
+        0.9967171775812658,
+        0.9999999573600222
+      ],
+      [
+        0.9999999577531677,
+        0.9969827282067419,
+        0.9958856975993737,
+        0.9965001817291417,
+        0.9999999577531676,
+        0.9969827280821246,
+        0.9958856973838334,
+        0.9965001814849722,
+        0.9999999577531707,
+        0.9969827280675948,
+        0.9958856974283992,
+        0.9965001817864076,
+        0.9999999577531672,
+        0.9969827279034629,
+        0.9958856975702147,
+        0.9965001812247075,
+        0.9999999577531673,
+        0.9969827279515542,
+        0.9958856973809604,
+        0.9965001816274162
+      ],
+      [
+        0.9969827277479026,
+        0.9999999574332127,
+        0.9963528667784458,
+        0.9967109486171641,
+        0.9969827276507166,
+        0.9999999574332125,
+        0.9963528668159393,
+        0.9967109482613731,
+        0.9969827280675948,
+        0.999999957433217,
+        0.9963528669997624,
+        0.9967109484631781,
+        0.9969827278828425,
+        0.9999999574332133,
+        0.9963528668082673,
+        0.9967109482353965,
+        0.9969827281159248,
+        0.9999999574332132,
+        0.9963528668909322,
+        0.9967109483986969
+      ],
+      [
+        0.9958856976481272,
+        0.996352867205499,
+        0.9999999573930408,
+        0.9967171780378836,
+        0.9958856965669807,
+        0.9963528665721715,
+        0.99999995739304,
+        0.9967171773071426,
+        0.9958856974283992,
+        0.9963528669997624,
+        0.9999999573930439,
+        0.9967171776909661,
+        0.9958856971141756,
+        0.9963528669492233,
+        0.9999999573930412,
+        0.996717177902955,
+        0.9958856972885144,
+        0.9963528669885351,
+        0.9999999573930399,
+        0.9967171773686674
+      ],
+      [
+        0.9965001820880623,
+        0.9967109487565377,
+        0.9967171780849629,
+        0.9999999573600227,
+        0.9965001810375811,
+        0.9967109482535492,
+        0.9967171773680847,
+        0.9999999573600229,
+        0.9965001817864076,
+        0.9967109484631781,
+        0.9967171776909661,
+        0.9999999573600261,
+        0.9965001816957018,
+        0.9967109483027763,
+        0.996717178010328,
+        0.9999999573600231,
+        0.9965001813002758,
+        0.9967109486487288,
+        0.9967171779650899,
+        0.9999999573600225
+      ],
+      [
+        0.999999957753167,
+        0.9969827280219894,
+        0.9958856972851513,
+        0.9965001816384351,
+        0.9999999577531674,
+        0.9969827278973729,
+        0.995885697069609,
+        0.996500181394266,
+        0.9999999577531672,
+        0.9969827278828425,
+        0.9958856971141756,
+        0.9965001816957018,
+        0.9999999577531707,
+        0.9969827277187104,
+        0.9958856972559921,
+        0.9965001811339996,
+        0.9999999577531674,
+        0.9969827277668014,
+        0.995885697066737,
+        0.9965001815367083
+      ],
+      [
+        0.9969827275837706,
+        0.9999999574332126,
+        0.9963528667279078,
+        0.9967109484567627,
+        0.9969827274865836,
+        0.9999999574332143,
+        0.996352866765401,
+        0.996710948100971,
+        0.9969827279034629,
+        0.9999999574332133,
+        0.9963528669492233,
+        0.9967109483027763,
+        0.9969827277187104,
+        0.9999999574332166,
+        0.9963528667577273,
+        0.9967109480749932,
+        0.9969827279517921,
+        0.9999999574332132,
+        0.9963528668403946,
+        0.9967109482382944
+      ],
+      [
+        0.9958856977899443,
+        0.9963528670140039,
+        0.9999999573930408,
+        0.9967171783572446,
+        0.9958856967087971,
+        0.9963528663806764,
+        0.9999999573930403,
+        0.9967171776265035,
+        0.9958856975702147,
+        0.9963528668082673,
+        0.9999999573930412,
+        0.996717178010328,
+        0.9958856972559921,
+        0.9963528667577273,
+        0.9999999573930443,
+        0.9967171782223161,
+        0.9958856974303304,
+        0.9963528667970377,
+        0.9999999573930402,
+        0.9967171776880291
+      ],
+      [
+        0.9965001815263618,
+        0.9967109485287546,
+        0.99671717829695,
+        0.9999999573600218,
+        0.9965001804758803,
+        0.9967109480257669,
+        0.9967171775800721,
+        0.9999999573600227,
+        0.9965001812247075,
+        0.9967109482353965,
+        0.996717177902955,
+        0.9999999573600231,
+        0.9965001811339996,
+        0.9967109480749932,
+        0.9967171782223161,
+        0.9999999573600261,
+        0.9965001807385749,
+        0.9967109484209449,
+        0.9967171781770775,
+        0.9999999573600229
+      ],
+      [
+        0.9999999577531666,
+        0.9969827282550707,
+        0.9958856974594892,
+        0.9965001812430108,
+        0.9999999577531677,
+        0.9969827281304549,
+        0.9958856972439476,
+        0.9965001809988405,
+        0.9999999577531673,
+        0.9969827281159248,
+        0.9958856972885144,
+        0.9965001813002758,
+        0.9999999577531674,
+        0.9969827279517921,
+        0.9958856974303304,
+        0.9965001807385749,
+        0.9999999577531713,
+        0.9969827279998825,
+        0.9958856972410762,
+        0.9965001811412846
+      ],
+      [
+        0.9969827276318617,
+        0.9999999574332135,
+        0.9963528667672181,
+        0.9967109488027146,
+        0.9969827275346747,
+        0.9999999574332126,
+        0.9963528668047117,
+        0.9967109484469243,
+        0.9969827279515542,
+        0.9999999574332132,
+        0.9963528669885351,
+        0.9967109486487288,
+        0.9969827277668014,
+        0.9999999574332132,
+        0.9963528667970377,
+        0.9967109484209449,
+        0.9969827279998825,
+        0.999999957433217,
+        0.9963528668797051,
+        0.9967109485842468
+      ],
+      [
+        0.9958856976006882,
+        0.9963528670966693,
+        0.99999995739304,
+        0.9967171783120083,
+        0.9958856965195414,
+        0.9963528664633419,
+        0.9999999573930405,
+        0.9967171775812658,
+        0.9958856973809604,
+        0.9963528668909322,
+        0.9999999573930399,
+        0.9967171779650899,
+        0.995885697066737,
+        0.9963528668403946,
+        0.9999999573930402,
+        0.9967171781770775,
+        0.9958856972410762,
+        0.9963528668797051,
+        0.9999999573930435,
+        0.9967171776427903
+      ],
+      [
+        0.9965001819290694,
+        0.9967109486920562,
+        0.9967171777626634,
+        0.9999999573600212,
+        0.9965001808785897,
+        0.9967109481890679,
+        0.996717177045786,
+        0.9999999573600222,
+        0.9965001816274162,
+        0.9967109483986969,
+        0.9967171773686674,
+        0.9999999573600225,
+        0.9965001815367083,
+        0.9967109482382944,
+        0.9967171776880291,
+        0.9999999573600229,
+        0.9965001811412846,
+        0.9967109485842468,
+        0.9967171776427903,
+        0.9999999573600258
+      ]
+    ],
+    "cosine_gate": 0.4,
+    "cosine_pass": true,
+    "pca_ratios": [
+      0.9973933986692297,
+      0.0010781492852352408,
+      0.0007878307263163391,
+      0.0007406213189894488,
+      3.4672929177469037e-16,
+      2.8539842426505976e-16,
+      2.42939910346928e-16,
+      2.326425531827421e-16,
+      1.9985323275441676e-16,
+      1.9248669393205828e-16,
+      1.8156964472969937e-16,
+      1.7522596877918085e-16
+    ],
+    "pca_cumulative": [
+      0.9973933986692297,
+      0.9984715479544649,
+      0.9992593786807813,
+      0.9999999999997707,
+      0.9999999999997711,
+      0.9999999999997714,
+      0.9999999999997716,
+      0.9999999999997718,
+      0.9999999999997721,
+      0.9999999999997723,
+      0.9999999999997725,
+      0.9999999999997727
+    ],
+    "pca_gate": 0.35,
+    "lambda1": 0.9973933986692297,
+    "pca_pass": true,
+    "proceed": true,
+    "delta_norm_mean": 0.47042712569236755,
+    "delta_norms": [
+      0.4734083116054535,
+      0.46984991431236267,
+      0.4694069027900696,
+      0.46904340386390686,
+      0.4734082818031311,
+      0.46984991431236267,
+      0.4694068729877472,
+      0.46904340386390686,
+      0.4734082818031311,
+      0.46984991431236267,
+      0.4694069027900696,
+      0.46904340386390686,
+      0.4734082818031311,
+      0.46984991431236267,
+      0.4694069027900696,
+      0.46904340386390686,
+      0.4734083116054535,
+      0.46984991431236267,
+      0.4694069027900696,
+      0.46904340386390686
+    ],
+    "mu_norm": 0.46981364488601685,
+    "scatter": [
+      [
+        -0.47277206945224637,
+        0.018932772317608305
+      ],
+      [
+        -0.46929248119395384,
+        0.00933977327401369
+      ],
+      [
+        -0.4687192616651419,
+        -0.0214359632428103
+      ],
+      [
+        -0.46847081814173785,
+        -0.007015430790682137
+      ],
+      [
+        -0.47277206380046977,
+        0.01893277900098877
+      ],
+      [
+        -0.46929247947805125,
+        0.009339776645008062
+      ],
+      [
+        -0.4687192602637764,
+        -0.021435962892572935
+      ],
+      [
+        -0.468470818400898,
+        -0.0070154290261512375
+      ],
+      [
+        -0.47277206271500066,
+        0.018932774333683337
+      ],
+      [
+        -0.4692924833384728,
+        0.009339774198568816
+      ],
+      [
+        -0.46871926435854827,
+        -0.02143596300622872
+      ],
+      [
+        -0.4684708160618045,
+        -0.00701542912460847
+      ],
+      [
+        -0.472772062558411,
+        0.018932775644426223
+      ],
+      [
+        -0.4692924797956678,
+        0.009339773914909779
+      ],
+      [
+        -0.46871926516566875,
+        -0.021435963346689117
+      ],
+      [
+        -0.4684708209491769,
+        -0.0070154332125953916
+      ],
+      [
+        -0.4727720666382599,
+        0.018932776090367552
+      ],
+      [
+        -0.46929248341992713,
+        0.009339773443074977
+      ],
+      [
+        -0.46871926690412946,
+        -0.021435964009682243
+      ],
+      [
+        -0.46847081644990685,
+        -0.007015428376981429
+      ]
+    ],
+    "pair_rows": [
+      {
+        "id": 0,
+        "content": "a tiger walking through a jungle",
+        "styled": "a watercolor tiger walking through a jungle",
+        "phrase": "watercolor",
+        "label": "a tiger walking through a j…",
+        "delta_norm": 0.4734083116054535,
+        "style_tokens": [
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "tiger",
+          "walking",
+          "through",
+          "a",
+          "jungle"
+        ]
+      },
+      {
+        "id": 1,
+        "content": "a woman standing in a city",
+        "styled": "a watercolor painting woman standing in a city",
+        "phrase": "watercolor painting",
+        "label": "a woman standing in a city",
+        "delta_norm": 0.46984991431236267,
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ],
+        "shared_tokens": [
+          "a",
+          "woman",
+          "standing",
+          "in",
+          "a",
+          "city"
+        ]
+      },
+      {
+        "id": 2,
+        "content": "a spaceship above a planet",
+        "styled": "a traditional watercolor illustration spaceship above a planet",
+        "phrase": "traditional watercolor illustration",
+        "label": "a spaceship above a planet",
+        "delta_norm": 0.4694069027900696,
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ],
+        "shared_tokens": [
+          "a",
+          "spaceship",
+          "above",
+          "a",
+          "planet"
+        ]
+      },
+      {
+        "id": 3,
+        "content": "a medieval castle on a mountain",
+        "styled": "a hand-painted watercolor medieval castle on a mountain",
+        "phrase": "hand-painted watercolor",
+        "label": "a medieval castle on a moun…",
+        "delta_norm": 0.46904340386390686,
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "medieval",
+          "castle",
+          "on",
+          "a",
+          "mountain"
+        ]
+      },
+      {
+        "id": 4,
+        "content": "a bowl of fruit on a wooden table",
+        "styled": "a watercolor bowl of fruit on a wooden table",
+        "phrase": "watercolor",
+        "label": "a bowl of fruit on a wooden…",
+        "delta_norm": 0.4734082818031311,
+        "style_tokens": [
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "bowl",
+          "of",
+          "fruit",
+          "on",
+          "a",
+          "wooden",
+          "table"
+        ]
+      },
+      {
+        "id": 5,
+        "content": "a futuristic motorcycle in a desert",
+        "styled": "a watercolor painting futuristic motorcycle in a desert",
+        "phrase": "watercolor painting",
+        "label": "a futuristic motorcycle in …",
+        "delta_norm": 0.46984991431236267,
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ],
+        "shared_tokens": [
+          "a",
+          "futuristic",
+          "motorcycle",
+          "in",
+          "a",
+          "desert"
+        ]
+      },
+      {
+        "id": 6,
+        "content": "a harbor at dusk with fishing boats",
+        "styled": "a traditional watercolor illustration harbor at dusk with fishing boats",
+        "phrase": "traditional watercolor illustration",
+        "label": "a harbor at dusk with fishi…",
+        "delta_norm": 0.4694068729877472,
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ],
+        "shared_tokens": [
+          "a",
+          "harbor",
+          "at",
+          "dusk",
+          "with",
+          "fishing",
+          "boats"
+        ]
+      },
+      {
+        "id": 7,
+        "content": "a jungle path with hanging vines",
+        "styled": "a hand-painted watercolor jungle path with hanging vines",
+        "phrase": "hand-painted watercolor",
+        "label": "a jungle path with hanging …",
+        "delta_norm": 0.46904340386390686,
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "jungle",
+          "path",
+          "with",
+          "hanging",
+          "vines"
+        ]
+      },
+      {
+        "id": 8,
+        "content": "an old library with tall shelves",
+        "styled": "watercolor an old library with tall shelves",
+        "phrase": "watercolor",
+        "label": "an old library with tall sh…",
+        "delta_norm": 0.4734082818031311,
+        "style_tokens": [
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "an",
+          "old",
+          "library",
+          "with",
+          "tall",
+          "shelves"
+        ]
+      },
+      {
+        "id": 9,
+        "content": "a red train crossing a steel bridge",
+        "styled": "a watercolor painting red train crossing a steel bridge",
+        "phrase": "watercolor painting",
+        "label": "a red train crossing a stee…",
+        "delta_norm": 0.46984991431236267,
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ],
+        "shared_tokens": [
+          "a",
+          "red",
+          "train",
+          "crossing",
+          "a",
+          "steel",
+          "bridge"
+        ]
+      },
+      {
+        "id": 10,
+        "content": "a ceramic teapot on a linen cloth",
+        "styled": "a traditional watercolor illustration ceramic teapot on a linen cloth",
+        "phrase": "traditional watercolor illustration",
+        "label": "a ceramic teapot on a linen…",
+        "delta_norm": 0.4694069027900696,
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ],
+        "shared_tokens": [
+          "a",
+          "ceramic",
+          "teapot",
+          "on",
+          "a",
+          "linen",
+          "cloth"
+        ]
+      },
+      {
+        "id": 11,
+        "content": "a fox sitting in snow",
+        "styled": "a hand-painted watercolor fox sitting in snow",
+        "phrase": "hand-painted watercolor",
+        "label": "a fox sitting in snow",
+        "delta_norm": 0.46904340386390686,
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "fox",
+          "sitting",
+          "in",
+          "snow"
+        ]
+      },
+      {
+        "id": 12,
+        "content": "a greenhouse filled with ferns",
+        "styled": "a watercolor greenhouse filled with ferns",
+        "phrase": "watercolor",
+        "label": "a greenhouse filled with fe…",
+        "delta_norm": 0.4734082818031311,
+        "style_tokens": [
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "greenhouse",
+          "filled",
+          "with",
+          "ferns"
+        ]
+      },
+      {
+        "id": 13,
+        "content": "a stone bridge over a quiet canal",
+        "styled": "a watercolor painting stone bridge over a quiet canal",
+        "phrase": "watercolor painting",
+        "label": "a stone bridge over a quiet…",
+        "delta_norm": 0.46984991431236267,
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ],
+        "shared_tokens": [
+          "a",
+          "stone",
+          "bridge",
+          "over",
+          "a",
+          "quiet",
+          "canal"
+        ]
+      },
+      {
+        "id": 14,
+        "content": "a violin on an empty chair",
+        "styled": "a traditional watercolor illustration violin on an empty chair",
+        "phrase": "traditional watercolor illustration",
+        "label": "a violin on an empty chair",
+        "delta_norm": 0.4694069027900696,
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ],
+        "shared_tokens": [
+          "a",
+          "violin",
+          "on",
+          "an",
+          "empty",
+          "chair"
+        ]
+      },
+      {
+        "id": 15,
+        "content": "a lantern hanging from a cedar tree",
+        "styled": "a hand-painted watercolor lantern hanging from a cedar tree",
+        "phrase": "hand-painted watercolor",
+        "label": "a lantern hanging from a ce…",
+        "delta_norm": 0.46904340386390686,
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "lantern",
+          "hanging",
+          "from",
+          "a",
+          "cedar",
+          "tree"
+        ]
+      },
+      {
+        "id": 16,
+        "content": "a fisherman on a misty lake",
+        "styled": "a watercolor fisherman on a misty lake",
+        "phrase": "watercolor",
+        "label": "a fisherman on a misty lake",
+        "delta_norm": 0.4734083116054535,
+        "style_tokens": [
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "fisherman",
+          "on",
+          "a",
+          "misty",
+          "lake"
+        ]
+      },
+      {
+        "id": 17,
+        "content": "a bicycle leaning against a bakery",
+        "styled": "a watercolor painting bicycle leaning against a bakery",
+        "phrase": "watercolor painting",
+        "label": "a bicycle leaning against a…",
+        "delta_norm": 0.46984991431236267,
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ],
+        "shared_tokens": [
+          "a",
+          "bicycle",
+          "leaning",
+          "against",
+          "a",
+          "bakery"
+        ]
+      },
+      {
+        "id": 18,
+        "content": "a cathedral interior with stained glass",
+        "styled": "a traditional watercolor illustration cathedral interior with stained glass",
+        "phrase": "traditional watercolor illustration",
+        "label": "a cathedral interior with s…",
+        "delta_norm": 0.4694069027900696,
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ],
+        "shared_tokens": [
+          "a",
+          "cathedral",
+          "interior",
+          "with",
+          "stained",
+          "glass"
+        ]
+      },
+      {
+        "id": 19,
+        "content": "a windmill on a grassy hill",
+        "styled": "a hand-painted watercolor windmill on a grassy hill",
+        "phrase": "hand-painted watercolor",
+        "label": "a windmill on a grassy hill",
+        "delta_norm": 0.46904340386390686,
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ],
+        "shared_tokens": [
+          "a",
+          "windmill",
+          "on",
+          "a",
+          "grassy",
+          "hill"
+        ]
+      }
+    ],
+    "pairs": [
+      {
+        "id": 0,
+        "content": "a tiger walking through a jungle",
+        "phrase": "watercolor",
+        "styled": "a watercolor tiger walking through a jungle",
+        "shared_tokens": [
+          "a",
+          "tiger",
+          "walking",
+          "through",
+          "a",
+          "jungle"
+        ],
+        "style_tokens": [
+          "watercolor"
+        ]
+      },
+      {
+        "id": 1,
+        "content": "a woman standing in a city",
+        "phrase": "watercolor painting",
+        "styled": "a watercolor painting woman standing in a city",
+        "shared_tokens": [
+          "a",
+          "woman",
+          "standing",
+          "in",
+          "a",
+          "city"
+        ],
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ]
+      },
+      {
+        "id": 2,
+        "content": "a spaceship above a planet",
+        "phrase": "traditional watercolor illustration",
+        "styled": "a traditional watercolor illustration spaceship above a planet",
+        "shared_tokens": [
+          "a",
+          "spaceship",
+          "above",
+          "a",
+          "planet"
+        ],
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ]
+      },
+      {
+        "id": 3,
+        "content": "a medieval castle on a mountain",
+        "phrase": "hand-painted watercolor",
+        "styled": "a hand-painted watercolor medieval castle on a mountain",
+        "shared_tokens": [
+          "a",
+          "medieval",
+          "castle",
+          "on",
+          "a",
+          "mountain"
+        ],
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ]
+      },
+      {
+        "id": 4,
+        "content": "a bowl of fruit on a wooden table",
+        "phrase": "watercolor",
+        "styled": "a watercolor bowl of fruit on a wooden table",
+        "shared_tokens": [
+          "a",
+          "bowl",
+          "of",
+          "fruit",
+          "on",
+          "a",
+          "wooden",
+          "table"
+        ],
+        "style_tokens": [
+          "watercolor"
+        ]
+      },
+      {
+        "id": 5,
+        "content": "a futuristic motorcycle in a desert",
+        "phrase": "watercolor painting",
+        "styled": "a watercolor painting futuristic motorcycle in a desert",
+        "shared_tokens": [
+          "a",
+          "futuristic",
+          "motorcycle",
+          "in",
+          "a",
+          "desert"
+        ],
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ]
+      },
+      {
+        "id": 6,
+        "content": "a harbor at dusk with fishing boats",
+        "phrase": "traditional watercolor illustration",
+        "styled": "a traditional watercolor illustration harbor at dusk with fishing boats",
+        "shared_tokens": [
+          "a",
+          "harbor",
+          "at",
+          "dusk",
+          "with",
+          "fishing",
+          "boats"
+        ],
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ]
+      },
+      {
+        "id": 7,
+        "content": "a jungle path with hanging vines",
+        "phrase": "hand-painted watercolor",
+        "styled": "a hand-painted watercolor jungle path with hanging vines",
+        "shared_tokens": [
+          "a",
+          "jungle",
+          "path",
+          "with",
+          "hanging",
+          "vines"
+        ],
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ]
+      },
+      {
+        "id": 8,
+        "content": "an old library with tall shelves",
+        "phrase": "watercolor",
+        "styled": "watercolor an old library with tall shelves",
+        "shared_tokens": [
+          "an",
+          "old",
+          "library",
+          "with",
+          "tall",
+          "shelves"
+        ],
+        "style_tokens": [
+          "watercolor"
+        ]
+      },
+      {
+        "id": 9,
+        "content": "a red train crossing a steel bridge",
+        "phrase": "watercolor painting",
+        "styled": "a watercolor painting red train crossing a steel bridge",
+        "shared_tokens": [
+          "a",
+          "red",
+          "train",
+          "crossing",
+          "a",
+          "steel",
+          "bridge"
+        ],
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ]
+      },
+      {
+        "id": 10,
+        "content": "a ceramic teapot on a linen cloth",
+        "phrase": "traditional watercolor illustration",
+        "styled": "a traditional watercolor illustration ceramic teapot on a linen cloth",
+        "shared_tokens": [
+          "a",
+          "ceramic",
+          "teapot",
+          "on",
+          "a",
+          "linen",
+          "cloth"
+        ],
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ]
+      },
+      {
+        "id": 11,
+        "content": "a fox sitting in snow",
+        "phrase": "hand-painted watercolor",
+        "styled": "a hand-painted watercolor fox sitting in snow",
+        "shared_tokens": [
+          "a",
+          "fox",
+          "sitting",
+          "in",
+          "snow"
+        ],
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ]
+      },
+      {
+        "id": 12,
+        "content": "a greenhouse filled with ferns",
+        "phrase": "watercolor",
+        "styled": "a watercolor greenhouse filled with ferns",
+        "shared_tokens": [
+          "a",
+          "greenhouse",
+          "filled",
+          "with",
+          "ferns"
+        ],
+        "style_tokens": [
+          "watercolor"
+        ]
+      },
+      {
+        "id": 13,
+        "content": "a stone bridge over a quiet canal",
+        "phrase": "watercolor painting",
+        "styled": "a watercolor painting stone bridge over a quiet canal",
+        "shared_tokens": [
+          "a",
+          "stone",
+          "bridge",
+          "over",
+          "a",
+          "quiet",
+          "canal"
+        ],
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ]
+      },
+      {
+        "id": 14,
+        "content": "a violin on an empty chair",
+        "phrase": "traditional watercolor illustration",
+        "styled": "a traditional watercolor illustration violin on an empty chair",
+        "shared_tokens": [
+          "a",
+          "violin",
+          "on",
+          "an",
+          "empty",
+          "chair"
+        ],
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ]
+      },
+      {
+        "id": 15,
+        "content": "a lantern hanging from a cedar tree",
+        "phrase": "hand-painted watercolor",
+        "styled": "a hand-painted watercolor lantern hanging from a cedar tree",
+        "shared_tokens": [
+          "a",
+          "lantern",
+          "hanging",
+          "from",
+          "a",
+          "cedar",
+          "tree"
+        ],
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ]
+      },
+      {
+        "id": 16,
+        "content": "a fisherman on a misty lake",
+        "phrase": "watercolor",
+        "styled": "a watercolor fisherman on a misty lake",
+        "shared_tokens": [
+          "a",
+          "fisherman",
+          "on",
+          "a",
+          "misty",
+          "lake"
+        ],
+        "style_tokens": [
+          "watercolor"
+        ]
+      },
+      {
+        "id": 17,
+        "content": "a bicycle leaning against a bakery",
+        "phrase": "watercolor painting",
+        "styled": "a watercolor painting bicycle leaning against a bakery",
+        "shared_tokens": [
+          "a",
+          "bicycle",
+          "leaning",
+          "against",
+          "a",
+          "bakery"
+        ],
+        "style_tokens": [
+          "watercolor",
+          "painting"
+        ]
+      },
+      {
+        "id": 18,
+        "content": "a cathedral interior with stained glass",
+        "phrase": "traditional watercolor illustration",
+        "styled": "a traditional watercolor illustration cathedral interior with stained glass",
+        "shared_tokens": [
+          "a",
+          "cathedral",
+          "interior",
+          "with",
+          "stained",
+          "glass"
+        ],
+        "style_tokens": [
+          "traditional",
+          "watercolor",
+          "illustration"
+        ]
+      },
+      {
+        "id": 19,
+        "content": "a windmill on a grassy hill",
+        "phrase": "hand-painted watercolor",
+        "styled": "a hand-painted watercolor windmill on a grassy hill",
+        "shared_tokens": [
+          "a",
+          "windmill",
+          "on",
+          "a",
+          "grassy",
+          "hill"
+        ],
+        "style_tokens": [
+          "hand-painted",
+          "watercolor"
+        ]
+      }
+    ],
+    "control": {
+      "phrase": "xyzzorp glorblesh",
+      "mean_cosine": 0.008710172104638817,
+      "lambda1": 0.07403595997888433,
+      "proceed": false,
+      "cosine_pass": false,
+      "pca_pass": false,
+      "delta_norm_mean": 0.3029107451438904
+    }
+  },
+  "backend": "demo",
+  "dim": 384,
+  "created": 1788778081.657817,
+  "n_pairs": 20,
+  "preview_pairs": [
+    {
+      "content": "a tiger walking through a jungle",
+      "styled": "a watercolor tiger walking through a jungle",
+      "phrase": "watercolor"
+    },
+    {
+      "content": "a woman standing in a city",
+      "styled": "a watercolor painting woman standing in a city",
+      "phrase": "watercolor painting"
+    },
+    {
+      "content": "a spaceship above a planet",
+      "styled": "a traditional watercolor illustration spaceship above a planet",
+      "phrase": "traditional watercolor illustration"
+    },
+    {
+      "content": "a medieval castle on a mountain",
+      "styled": "a hand-painted watercolor medieval castle on a mountain",
+      "phrase": "hand-painted watercolor"
+    },
+    {
+      "content": "a bowl of fruit on a wooden table",
+      "styled": "a watercolor bowl of fruit on a wooden table",
+      "phrase": "watercolor"
+    },
+    {
+      "content": "a futuristic motorcycle in a desert",
+      "styled": "a watercolor painting futuristic motorcycle in a desert",
+      "phrase": "watercolor painting"
+    },
+    {
+      "content": "a harbor at dusk with fishing boats",
+      "styled": "a traditional watercolor illustration harbor at dusk with fishing boats",
+      "phrase": "traditional watercolor illustration"
+    },
+    {
+      "content": "a jungle path with hanging vines",
+      "styled": "a hand-painted watercolor jungle path with hanging vines",
+      "phrase": "hand-painted watercolor"
+    }
+  ]
+}
