@@ -1,0 +1,64 @@
+# TCSA CPU engine
+
+Text-Conditioning Style Absorption for **Krea 2 RAW**.
+
+Extracts a portable style LoRA from the official **Qwen3-VL-4B-Instruct** text stack and the **txt_in / text_fusion** maps inside the RAW checkpoint. The 12B DiT is never loaded. Image generation stays on a hosted Turbo endpoint.
+
+This is the method in *Text-Conditioning Style Absorption for Krea 2 RAW* (integrated paper, September 2026).
+
+## Install
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Qwen3-VL-4B in text-only mode needs about 8 GB RAM in float32, or 4–5 GB with a 4/8-bit build. Do not load the vision tower.
+
+Place locally:
+
+| Role | Typical path |
+| --- | --- |
+| Text encoder | Hugging Face `Qwen/Qwen3-VL-4B-Instruct` |
+| Krea 2 RAW | `raw.safetensors` / `krea2_raw_bf16.safetensors` — only the named text maps are read |
+
+## Extract
+
+Confirm the RAW file actually contains the injection maps:
+
+```bash
+python3 cli.py inspect-raw --raw /path/to/krea2_raw.safetensors
+```
+
+Run the paper pipeline:
+
+```bash
+python3 cli.py go --style watercolor --encoder qwen --qwen Qwen/Qwen3-VL-4B-Instruct --raw /path/to/krea2_raw.safetensors --rank 4
+```
+
+Unknown / non-style phrases should print `NO-GO` and refuse to write a LoRA.
+
+Geometry-only dry run (no Qwen, no RAW) — verifies gates and packaging:
+
+```bash
+python3 cli.py go --style watercolor --encoder geometric
+```
+
+## Outputs
+
+`runs/<style>/`
+
+- `tcsa_<style>_r<rank>_diffusers.safetensors` — PEFT keys `txt_in.linear_*`, `text_fusion.projector`
+- `tcsa_<style>_r<rank>_musubi.safetensors` — native `txtmlp.*` / `txtfusion.projector` plus Comfy `diffusion_model.` aliases
+
+`lora_alpha = rank`. Tensors are F16. Untouched DiT blocks are omitted.
+
+
+## Protocol (what this binary actually does)
+
+0. Prefix-insert the style phrase; do not rewrite the scene.
+1. Encode with the official template and 12-layer tap `(2,5,8,…,35)`.
+2. Align shared content tokens by LCS; pool the residual style span separately.
+3. Gates: pairwise cosine, PCA λ₁, paraphrase vs null controls, soft-prompt `h + μ`.
+4. Stop if any gate fails.
+5. Rank-1 initializer, then thin-SVD / least-squares into projector → `txt_in.linear_1` → `txt_in.linear_2`.
+6. Package both namespaces.
