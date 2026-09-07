@@ -12,8 +12,6 @@ This is the method in *Text-Conditioning Style Absorption for Krea 2 RAW* (integ
 python -m pip install -r requirements.txt
 ```
 
-Qwen3-VL-4B in text-only mode needs about 8 GB RAM in float32, or 4–5 GB with a 4/8-bit build. Do not load the vision tower.
-
 Place locally:
 
 | Role | Typical path |
