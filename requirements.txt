@@ -1,0 +1,6 @@
+numpy>=1.24
+safetensors>=0.4
+# Official encoder (optional, required for --encoder qwen)
+torch>=2.4
+transformers>=4.57
+accelerate>=0.34
