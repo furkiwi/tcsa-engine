@@ -30,7 +30,7 @@ python cli.py inspect-raw --raw /path/to/krea2_raw.safetensors
 Run the paper pipeline:
 
 ```bash
-python cli.py go --style watercolor --encoder qwen --qwen C:\tcsa-engine\models\Qwen3-VL-4B-Instruct --raw C:\tcsa-cpu-studio\models\krea-2-raw.safetensors --rank 4
+python cli.py go --style watercolor --encoder qwen --qwen C:\tcsa-engine\models\Qwen3-VL-4B-Instruct --raw C:\tcsa-engine\models\krea-2-raw.safetensors --rank 4
 ```
 
 Unknown / non-style phrases should print `NO-GO` and refuse to write a LoRA.
