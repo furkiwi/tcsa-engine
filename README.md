@@ -16,8 +16,8 @@ Place locally:
 
 | Role | Typical path |
 | --- | --- |
-| Text encoder | `[Qwen3-VL-4B-Instruct](https://huggingface.co/Qwen/Qwen3-VL-4B-Instruct/tree/main)` |
-| Krea 2 RAW | `[raw.safetensors](https://huggingface.co/krea/Krea-2-Raw/blob/main/raw.safetensors)` |
+| Text encoder | [Qwen3-VL-4B-Instruct](https://huggingface.co/Qwen/Qwen3-VL-4B-Instruct/tree/main) |
+| Krea 2 RAW | [raw.safetensors](https://huggingface.co/krea/Krea-2-Raw/blob/main/raw.safetensors) |
 
 ## Extract
 
