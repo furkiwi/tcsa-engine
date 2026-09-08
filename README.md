@@ -24,7 +24,7 @@ Place locally:
 Confirm the RAW file actually contains the injection maps:
 
 ```bash
-python3 cli.py inspect-raw --raw /path/to/krea2_raw.safetensors
+python cli.py inspect-raw --raw /path/to/krea2_raw.safetensors
 ```
 
 Run the paper pipeline:
