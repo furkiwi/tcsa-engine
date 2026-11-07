@@ -157,3 +157,21 @@ LoRA 無法增加原本不存在的畫師 token，profile 成功不保證本次 
 rank32 約 65,536 個可訓練參數，權重約 256 KiB 加上 metadata。檔案小是因為只修改這一個投影層。
 目前已驗證合成資料訓練、推論模式內啟用梯度、驗證選模、取消、匯出權重重建與 ComfyUI LoRA 解析。
 真實 profile 的訓練時間、畫風保留程度和 K620/GGUF 端到端載入仍須在本地實測。
+
+## 5. LoRA 幾乎無作用時的載入檢查
+新增 **TCSA LoRA Check (CPU)**，接入原本的 CPU adapter 與 CPU CLIP，選取放在 models/loras 下的 TCSA LoRA。
+scene 使用與出圖完全相同的無畫師提示，strength=1。此節點可單獨執行，主控台會顯示 JSON 報告。
+它在 CPU adapter 的 out_proj 明確加入 LoRA 增量，執行後移除 hook，不更動原始模型權重。
+
+報告的 conditioning_relative_l2 是投影與 RMSNorm 後的相對條件變化，conditioning_max_abs_change 是最大絕對變化。
+weight_delta_relative_l2 比較增量與原權重大小。這些數字不是畫風成功門檻，也不能單獨證明 GGUF Loader 已套用。
+
+要排除 GGUF LoRA 套用路徑，使用 **CFG=1** 的簡單對照：
+1. KSampler 的 model 接回未套 LoRA 的 GGUF 模型。
+2. positive 先接本節點 baseline，再接 lora_applied，各出一張，固定 seed 與其他設定。
+3. 若明確套用後有目標畫風、正常 Loader 沒有，優先排查 GGUF runtime patching。
+4. 若明確套用仍幾乎沒畫風，表示這份權重未能重現 profile 的視覺效果，應修改蒸餾方法。
+
+這個診斷節點只處理傳入提示詞。CFG>1 時還有負向分支的 LoRA 效果，不能把只改正向的對照視為完整等價。
+不要同時讓 sampler model 套用同一份 LoRA，以免混淆。
+現行訓練的替代目標 loss 下降不足以證明畫風轉換成功；請先保留成功 profile 作為教師。

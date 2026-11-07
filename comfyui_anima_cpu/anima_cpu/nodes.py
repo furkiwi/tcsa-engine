@@ -225,11 +225,43 @@ class TrainLoRA:
         return {"ui": {"text": [text]}, "result": (str(path), text)}
 
 
+class InspectLoRA:
+    CATEGORY = CATEGORY
+    FUNCTION = 'run'
+    RETURN_TYPES = ('CONDITIONING', 'CONDITIONING', 'STRING')
+    RETURN_NAMES = ('baseline', 'lora_applied', 'report')
+    OUTPUT_NODE = True
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {'required': {
+            'adapter': ('TCSA_ANIMA_ADAPTER',), 'clip': ('CLIP',),
+            'lora_name': (folder_paths.get_filename_list('loras'),),
+            'scene': ('STRING', {'multiline': True, 'default': 'a furry girl reading a book'}),
+            'strength': ('FLOAT', {'default': 1.0, 'min': 0.0, 'max': 3.0, 'step': 0.1})}}
+
+    @classmethod
+    def IS_CHANGED(cls, adapter, clip, lora_name, scene, strength):
+        path = folder_paths.get_full_path('loras', lora_name)
+        return file_digest(path) if path else 'missing'
+
+    def run(self, adapter, clip, lora_name, scene, strength):
+        from .lora_inspect import inspect_lora
+        path = folder_paths.get_full_path('loras', lora_name)
+        if path is None:
+            raise FileNotFoundError(lora_name)
+        baseline, applied, report = inspect_lora(adapter, clip, path, scene, strength)
+        text = json.dumps(report, ensure_ascii=False, indent=2)
+        print('TCSA LoRA Check\n' + text, flush=True)
+        return {'ui': {'text': [text]}, 'result': ([[baseline, {}]], [[applied, {}]], text)}
+
+
 NODE_CLASS_MAPPINGS = {"TCSAAnimaAdapterCPU": AdapterLoader, "TCSAAnimaExtract": Extract,
                        "TCSAAnimaLoadProfile": LoadProfile, "TCSAAnimaCompare": Compare,
-                       "TCSAAnimaTrainLoRACPU": TrainLoRA}
+                       "TCSAAnimaTrainLoRACPU": TrainLoRA, "TCSAAnimaInspectLoRA": InspectLoRA}
 NODE_DISPLAY_NAME_MAPPINGS = {"TCSAAnimaAdapterCPU": "TCSA Anima Adapter (CPU)",
                               "TCSAAnimaExtract": "TCSA Extract Artist",
                               "TCSAAnimaLoadProfile": "TCSA Load Profile",
                               "TCSAAnimaCompare": "TCSA Compare Artist",
-                              "TCSAAnimaTrainLoRACPU": "TCSA Train LoRA (CPU)"}
+                              "TCSAAnimaTrainLoRACPU": "TCSA Train LoRA (CPU)",
+                              "TCSAAnimaInspectLoRA": "TCSA LoRA Check (CPU)"}
