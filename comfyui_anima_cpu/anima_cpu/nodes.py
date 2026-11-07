@@ -177,9 +177,59 @@ class Compare:
         return {"ui": {"text": [report]}, "result": (positive, report)}
 
 
+class TrainLoRA:
+    CATEGORY = CATEGORY
+    FUNCTION = "run"
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("lora_path", "report")
+    OUTPUT_NODE = True
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {
+            "adapter": ("TCSA_ANIMA_ADAPTER",), "clip": ("CLIP",),
+            "profile": ("TCSA_ANIMA_PROFILE",),
+            "train_scenes": ("STRING", {"multiline": True, "default":
+                "a furry girl in a snowy forest\na furry girl reading by a window\na fox walking in a garden\n"
+                "a woman drinking tea\na cat sitting on a rooftop\na boy holding an umbrella\n"
+                "a stone bridge over a river\na seaside village at sunset"}),
+            "validation_scenes": ("STRING", {"multiline": True, "default":
+                "a furry girl playing a violin\na lighthouse surrounded by waves"}),
+            "rank": ("INT", {"default": 32, "min": 1, "max": 128}),
+            "steps": ("INT", {"default": 300, "min": 1, "max": 10000}),
+            "learning_rate": ("FLOAT", {"default": 0.001, "min": 0.000001, "max": 0.1, "step": 0.0001}),
+            "seed": ("INT", {"default": 42, "min": 0, "max": 2147483647}),
+            "name": ("STRING", {"default": "kiwi_mix_lora"}),
+            "overwrite": ("BOOLEAN", {"default": False})}}
+
+    def run(self, adapter, clip, profile, train_scenes, validation_scenes, rank, steps,
+            learning_rate, seed, name, overwrite=False):
+        from .lora_train import train_profile
+        from comfy.utils import ProgressBar
+        from comfy.model_management import throw_exception_if_processing_interrupted
+        import logging
+
+        progress_bar = ProgressBar(steps)
+
+        def progress(stage, step, total):
+            throw_exception_if_processing_interrupted()
+            if stage == 'cache' or step % 20 == 0 or step == total:
+                logging.info("TCSA LoRA %s %d/%d", stage, step, total)
+            if stage == 'train':
+                progress_bar.update_absolute(step, total)
+
+        path = profile_path(Path(folder_paths.get_output_directory()) / 'tcsa_anima_lora', name)
+        report = train_profile(adapter, clip, profile, train_scenes, validation_scenes, rank,
+                               steps, learning_rate, seed, path, overwrite, progress)
+        text = json.dumps(report, ensure_ascii=False, indent=2)
+        return {"ui": {"text": [text]}, "result": (str(path), text)}
+
+
 NODE_CLASS_MAPPINGS = {"TCSAAnimaAdapterCPU": AdapterLoader, "TCSAAnimaExtract": Extract,
-                       "TCSAAnimaLoadProfile": LoadProfile, "TCSAAnimaCompare": Compare}
+                       "TCSAAnimaLoadProfile": LoadProfile, "TCSAAnimaCompare": Compare,
+                       "TCSAAnimaTrainLoRACPU": TrainLoRA}
 NODE_DISPLAY_NAME_MAPPINGS = {"TCSAAnimaAdapterCPU": "TCSA Anima Adapter (CPU)",
                               "TCSAAnimaExtract": "TCSA Extract Artist",
                               "TCSAAnimaLoadProfile": "TCSA Load Profile",
-                              "TCSAAnimaCompare": "TCSA Compare Artist"}
+                              "TCSAAnimaCompare": "TCSA Compare Artist",
+                              "TCSAAnimaTrainLoRACPU": "TCSA Train LoRA (CPU)"}

@@ -108,3 +108,52 @@ python -m unittest discover -s tests -v
 - https://github.com/Comfy-Org/ComfyUI/blob/master/comfy/ldm/anima/model.py
 - https://github.com/Comfy-Org/ComfyUI/blob/master/comfy/model_base.py
 - https://github.com/city96/ComfyUI-GGUF/blob/main/loader.py
+
+## 4. 將成功的 profile 蒸餾為標準 LoRA（CPU 實驗版）
+新增 **TCSA Train LoRA (CPU)**，接入三個輸入：
+- Adapter Loader → adapter（與成功出圖相同的 GGUF）
+- CPU CLIP Loader → clip
+- Load Profile → profile（例如已確認有效的 kiwi_mix）
+
+先使用 rank=32、steps=300、learning_rate=0.001、seed=42。
+train_scenes 預設 8 個場景，可改成與用途相關的 4–64 行。validation_scenes 為 2–16 個不同場景，不能和訓練或原 profile 抽取場景重複。
+節點使用已保存的 profile 及其權重配方作為教師，不必重新填 artist。
+name 可填 kiwi_mix_lora。按執行後先快取各場景，再執行 CPU 訓練。主控台顯示 cache / train 進度，ComfyUI 可正常中止。
+
+輸出位置：
+
+```text
+ComfyUI/output/tcsa_anima_lora/kiwi_mix_lora.safetensors
+```
+
+將檔案複製到 ComfyUI/models/loras/，重新整理模型清單。
+使用 **Load LoRA (Model Only)** 或一般 **Load LoRA**：
+
+| 連接/參數 | 設定 |
+|---|---|
+| GGUF UNet Loader 的 MODEL | 接 LoRA Loader 的 model |
+| LoRA Loader 的 MODEL 輸出 | 接原有模型取樣設定節點/取樣器，維持原工作流順序 |
+| strength_model | 先設 1.0 |
+| strength_clip（若有） | 0.0 |
+| 正向條件 | 一般 CLIP Text Encode，輸入新場景，不寫畫師 |
+| 負向條件 | 沿用原本工作流 |
+
+**LoRA 測試不要將 TCSA Compare 的已投影條件接到 positive。** 讓原生 Anima adapter 執行，LoRA 才會作用到這一層。
+請使用與訓練相同的 GGUF，未驗證跨 checkpoint/量化版本可移植性。
+先固定 seed 比較「無 LoRA」「原抽取 profile」「LoRA 1.0」，且不要同時套用 profile 和 LoRA。
+若效果過強再比較 0.5；若缺乏風格，記下結果和 validation loss，不要只用提高強度判定成功。
+
+### 訓練的實際範圍
+只訓練 llm_adapter.out_proj 的低秩矩陣，Qwen、其餘 adapter、DiT 都不訓練。
+先快取最後投影層的輸入/輸出，之後每步只需算低秩增量、RMSNorm 與條件空間的注意力回應。
+教師是成功 profile + 新場景條件，包含完整畫師前綴。學生輸出維持無畫師提示詞的長度。
+目標是在固定的風格/內容/隨機查詢向量下，學生的注意力回應接近教師，另加入 0.05 倍內容漂移限制。
+這些查詢**不是從實際 DiT 抽出的 queries**，此 loss 只是 CPU 可行的替代目標。它不等同於去噪蒸餾或圖片品質指標。
+保留空提示詞的回應作為訓練錨點，但沒有保證所有負向提示詞皆完全不變。
+每 20 步在驗證場景評估並保留最低 loss 權重。若完全沒有改善則不匯出。
+LoRA 無法增加原本不存在的畫師 token，profile 成功不保證本次 LoRA 蒸餾成功，必須重新出圖檢查。
+
+輸出使用 ComfyUI 的 diffusion_model.llm_adapter.out_proj 鍵名，lora_up/down.weight 與 alpha=rank，float32。
+rank32 約 65,536 個可訓練參數，權重約 256 KiB 加上 metadata。檔案小是因為只修改這一個投影層。
+目前已驗證合成資料訓練、推論模式內啟用梯度、驗證選模、取消、匯出權重重建與 ComfyUI LoRA 解析。
+真實 profile 的訓練時間、畫風保留程度和 K620/GGUF 端到端載入仍須在本地實測。
