@@ -59,7 +59,7 @@ def load_adapter(path):
     return {"module": adapter, "sha256": digest.hexdigest(), "checkpoint": Path(path).name}
 
 
-def raw_encode(clip, text):
+def raw_encode(clip, text, allow_weighted=False):
     if clip.patcher.load_device.type != "cpu":
         raise ValueError("Set your CLIP Loader device to cpu. Image sampling can still use GPU.")
     if getattr(clip.patcher, "patches", {}):
@@ -69,8 +69,11 @@ def raw_encode(clip, text):
     if ids is None or ids.ndim != 1 or not 0 < ids.numel() <= 512:
         raise ValueError("Expected stock Anima dual-tokenizer conditioning with up to 512 T5 tokens.")
     weights = result.get("t5xxl_weights", torch.ones_like(ids, dtype=torch.float32))
-    if not torch.equal(weights.cpu(), torch.ones_like(weights.cpu())):
-        raise ValueError("Use unweighted prompts for this experiment.")
+    if weights.shape != ids.shape or not torch.isfinite(weights).all():
+        raise ValueError("T5 weights must be finite and match the token IDs.")
+    if not allow_weighted and not torch.equal(weights.cpu(), torch.ones_like(weights.cpu())):
+        raise ValueError("Keep scenes unweighted; put weighted artist tags in the artist field.")
+    result["t5xxl_weights"] = weights
     hidden = result["cond"].detach().cpu().float()
     if hidden.ndim != 3 or hidden.shape[0] != 1 or hidden.shape[-1] != 1024 or hidden.shape[1] > 512:
         raise ValueError("Expected one Anima Qwen3-0.6B prompt, at most 512 Qwen tokens.")
@@ -78,9 +81,12 @@ def raw_encode(clip, text):
 
 
 @torch.inference_mode()
-def encode(adapter, clip, text):
-    ids, hidden, raw = raw_encode(clip, text)
+def encode(adapter, clip, text, allow_weighted=False):
+    ids, hidden, raw = raw_encode(clip, text, allow_weighted=allow_weighted)
     context = adapter["module"](hidden, ids[None]).detach().cpu().float()
+    # Match Anima.preprocess_text_embeds: apply native T5 token weights AFTER
+    # the adapter. The tokenizer handles multiple artists and escaped parentheses.
+    context = context * raw["t5xxl_weights"].to(context).reshape(1, -1, 1)
     return ids.tolist(), context, raw
 
 

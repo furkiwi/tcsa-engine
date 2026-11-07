@@ -22,7 +22,20 @@ Git 與 ZIP 擇一，避免同名節點重複載入。舊 anima_artist_demo 可�
 - 使用你原本的 Anima CLIP Loader，設定 device=cpu。原生 CLIP Loader 可選 cpu。若目前 GGUF CLIP Loader 沒有 CPU 選項，可使用原版 qwen_3_06b_base.safetensors 搭配原生 loader，沿用能產生 Anima t5xxl_ids 的 type。抽取與對照必須使用同一個 CLIP。
 - 新增 **TCSA Anima Adapter (CPU)**，選取與出圖 UNet Loader **完全相同的 Anima Turbo GGUF 檔案**。它只解量化 llm_adapter 張量為 float32，不載入其他去噪層。原始 GGUF 會以 mmap 開啟，adapter 本身仍佔用 RAM。
 - 新增 **TCSA Extract Artist**，接上 adapter 與 CPU CLIP。
-- artist 換成已知有效的 @繪師名；scenes 每行一個簡單英文場景，預設 3 個。限制 2–32 個不同場景。
+- artist 可填單一 @繪師、多個逗號分隔的畫師，或原生加權提示。例如：
+
+```text
+(@sunapua:0.8), (@waonaolmao:0.9), (@oka \(bananashoe\):0.7)
+```
+
+畫師名稱的字面括號要寫成 `\(`、`\)`，外層權重括號保持不跳脫。
+沿用 ComfyUI 原生 tokenizer；Qwen 路徑按 Anima 規則保持 token 權重 1，T5 權重於 adapter 輸出後套用。
+native_artist 對照會使用保存的完整加權提示，extracted 的前綴已包含權重，不會再乘一次。
+權重是抽取時固定的配方。更改各畫師權重後請重新抽取，建議另存 name（例如 kiwi_mix）。
+Compare 的 strength 控制整份 profile 的套用強度，和個別畫師權重用途不同。
+原有單一畫師 profile 可繼續載入；新的混合 profile 使用相同 v2 格式。
+
+- scenes 每行一個簡單、未加權的英文場景，預設 3 個。限制 2–32 個不同場景。
 - name 使用英數、底線或連字號。執行後存於 ComfyUI/output/tcsa_anima/<name>.safetensors。
 - 同名預設拒絕覆寫，確定要重抽時才開啟 overwrite。
 
@@ -69,13 +82,13 @@ ZIP 安裝的腳本位於 custom_nodes/tcsa-anima-cpu/compare_api.py。
 換另一個 seed 重複一次即可形成第一輪驗證。
 
 ## 方法與限制
-在不同場景前面加入同一個「@artist, 」前綴，取得完整 adapter 輸出。
+在不同場景前面加入同一個畫師提示前綴（可以包含多位畫師與各自權重），取得完整 adapter 輸出。
 只有 T5 序列後綴與原場景逐 token 相同時才接受，以免錯取內容或 EOS。
 保留每個前綴 token 的向量，跨場景平均。套用時將它們接到新場景已投影條件之前，再補齊到 512 個位置。
 這是研究用假設。畫師造成的**內容 token 改變**並沒有被移植，新增前綴也可能本身影響構圖。
 報告中的特徵 L2 距離不能判定畫風成功，不能作為 GO 門檻。
 已投影條件會移除 T5 IDs 和 Qwen mask，避免二次 adapter 投影。
-單一提示詞、未加權、最多 512 Qwen/T5 tokens；不支援已套 CLIP LoRA 或多段 conditioning。
+scene 保持單一未加權提示詞；artist 支援多位畫師與原生括號權重。整段最多 512 Qwen/T5 tokens；不支援已套 CLIP LoRA 或多段 conditioning。
 CPU 抽取不需要全域 --cpu；出圖可以保留原本的 --lowvram 等啟動方式。
 adapter 在 ComfyUI 節點快取中可能持續佔用 RAM。記憶體不足時可先減少抽取場景、關閉其他工作流，必要時重啟 ComfyUI。
 
@@ -83,6 +96,7 @@ adapter 在 ComfyUI 節點快取中可能持續佔用 RAM。記憶體不足時�
 測試涵蓋真實 safetensors/GGUF 檔案讀寫、Q4_0 解量化、Q3_K 零值區塊、
 精確零強度、前綴 token 邊界、覆寫與鎖、模型/編碼器不一致拒絕、節點 metadata、
 以及批次比較保持 seed/取樣參數。
+新增多畫師加權的公開節點流程測試，包含抽取、存檔、重新載入、原生對照、避免重複加權、零強度與非有限權重拒絕。
 另以當時 ComfyUI 上游 LLMAdapter 程式及小型隨機權重測試 CPU forward / strict meta loading。
 沒有使用你的完整 Turbo GGUF 或真實 Qwen 權重跑端到端，沒有宣稱已抽出有效畫風。
 

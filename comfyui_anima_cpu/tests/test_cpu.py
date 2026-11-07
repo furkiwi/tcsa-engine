@@ -146,7 +146,7 @@ class NodeTests(unittest.TestCase):
     def tearDown(self):
         self.modules.stop()
 
-    def encode(self, adapter, clip, text):
+    def encode(self, adapter, clip, text, allow_weighted=False):
         ids, value = ([7, 8, 2, 3, 1], torch.cat((self.prefix[None], self.base), dim=1)) if text.startswith('@') else ([2, 3, 1], self.base)
         return ids, value, {"cond": self.base, "t5xxl_ids": torch.tensor(ids),
                             "t5xxl_weights": torch.ones(len(ids)), "attention_mask": torch.ones(1, 3)}

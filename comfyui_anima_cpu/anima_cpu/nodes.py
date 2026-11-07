@@ -59,7 +59,8 @@ class Extract:
     def INPUT_TYPES(cls):
         return {"required": {
             "adapter": ("TCSA_ANIMA_ADAPTER",), "clip": ("CLIP",),
-            "artist": ("STRING", {"default": "@your_artist"}),
+            "artist": ("STRING", {"default": "@your_artist", "multiline": True,
+                                  "tooltip": "Comma-separated artist prompts, e.g. (@artist_a:0.8), (@artist_b:0.9). Use \\( and \\) for literal parentheses."}),
             "scenes": ("STRING", {"multiline": True, "default": SCENES}),
             "name": ("STRING", {"default": "artist_trial"}),
             "overwrite": ("BOOLEAN", {"default": False})}}
@@ -71,8 +72,8 @@ class Extract:
         if path.exists() and not overwrite:
             raise FileExistsError("Profile exists. Use Load Profile, another name, or overwrite=true.")
         artist = artist.strip()
-        if not artist.startswith("@") or artist == "@your_artist" or len(artist) < 2:
-            raise ValueError("Replace @your_artist with a known working Anima artist tag.")
+        if not artist.lstrip("( ").startswith("@") or "@your_artist" in artist or len(artist) < 2:
+            raise ValueError("Enter artist tags, e.g. (@artist_a:0.8), (@artist_b:0.9). Replace @your_artist.")
         texts = list(dict.fromkeys(line.strip() for line in scenes.splitlines() if line.strip()))
         if not 2 <= len(texts) <= 32:
             raise ValueError("Provide 2–32 distinct extraction scenes, one per line.")
@@ -83,7 +84,7 @@ class Extract:
             if "@" in scene:
                 raise ValueError("Scene lines must not contain artist tags.")
             bare_ids, _, _ = encode(adapter, clip, scene)
-            tagged_ids, context, _ = encode(adapter, clip, artist + ", " + scene)
+            tagged_ids, context, _ = encode(adapter, clip, artist + ", " + scene, allow_weighted=True)
             length = prefix_length(bare_ids, tagged_ids)
             if reference_ids is not None and tagged_ids[:length] != reference_ids:
                 raise ValueError("Artist prefix tokenization differs across scenes.")
@@ -149,7 +150,7 @@ class Compare:
         if probe.shape != actual_probe.shape or not torch.allclose(probe, actual_probe, rtol=1e-4, atol=1e-5):
             raise ValueError("Text encoder output differs from extraction. Use the same CPU CLIP.")
         bare_ids, base, raw = encode(adapter, clip, scene)
-        tagged_ids, teacher, raw_teacher = encode(adapter, clip, info["artist"] + ", " + scene)
+        tagged_ids, teacher, raw_teacher = encode(adapter, clip, info["artist"] + ", " + scene, allow_weighted=True)
         length = prefix_length(bare_ids, tagged_ids)
         if tagged_ids[:length] != info["prefix_ids"]:
             raise ValueError("Artist token boundary differs on this scene.")
