@@ -175,3 +175,12 @@ weight_delta_relative_l2 比較增量與原權重大小。這些數字不是畫�
 這個診斷節點只處理傳入提示詞。CFG>1 時還有負向分支的 LoRA 效果，不能把只改正向的對照視為完整等價。
 不要同時讓 sampler model 套用同一份 LoRA，以免混淆。
 現行訓練的替代目標 loss 下降不足以證明畫風轉換成功；請先保留成功 profile 作為教師。
+
+
+## 單步去噪蒸餾實驗（新增）
+
+若 CPU 直接套用舊 LoRA 也沒有畫風，可改測真實 Anima 去噪輸出監督。
+先看 [DENOISE_EXPERIMENT.md](DENOISE_EXPERIMENT.md)，依序執行老師快取、一次反向傳播探測、10 次短訓練。
+新增節點 `TCSA Denoise Teacher Cache` / `TCSA Denoise Train (Experimental)`，
+附有 `examples/denoise_teacher_workflow.json` 和 `examples/denoise_probe_workflow.json`。
+這仍是未經完整 Anima/K620 驗證的實驗；probe 通過和 loss 下降都不等於畫風成功。

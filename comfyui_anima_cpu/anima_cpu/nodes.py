@@ -265,3 +265,10 @@ NODE_DISPLAY_NAME_MAPPINGS = {"TCSAAnimaAdapterCPU": "TCSA Anima Adapter (CPU)",
                               "TCSAAnimaCompare": "TCSA Compare Artist",
                               "TCSAAnimaTrainLoRACPU": "TCSA Train LoRA (CPU)",
                               "TCSAAnimaInspectLoRA": "TCSA LoRA Check (CPU)"}
+
+
+# Keep the existing extraction and diagnostic node names stable.
+from .denoise_nodes import NODE_CLASS_MAPPINGS as _denoise_classes
+from .denoise_nodes import NODE_DISPLAY_NAME_MAPPINGS as _denoise_names
+NODE_CLASS_MAPPINGS.update(_denoise_classes)
+NODE_DISPLAY_NAME_MAPPINGS.update(_denoise_names)
